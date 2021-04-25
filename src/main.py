@@ -1,14 +1,14 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
-from . import schemas, models
 from .database import engine, SessionLocal, get_db
 from .schemas import CreateApartmentRequest, CreateHouseRequest, CreateLandRequest
+from .models import House, Apartment, Land
 
 app = FastAPI()
 
 @app.post('/addhouse', status_code=status.HTTP_201_CREATED)
 def createHouse(request: CreateHouseRequest, db: Session = Depends(get_db)):
-    new_house = models.House(
+    new_house = House(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -29,8 +29,8 @@ def createHouse(request: CreateHouseRequest, db: Session = Depends(get_db)):
 
 
 @app.post('/addapartment', status_code=status.HTTP_201_CREATED)
-def createApartment(request: schemas.CreateApartmentRequest, db: Session = Depends(get_db)):
-    new_apt = models.Apartment(
+def createApartment(request: CreateApartmentRequest, db: Session = Depends(get_db)):
+    new_apt = Apartment(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -52,8 +52,8 @@ def createApartment(request: schemas.CreateApartmentRequest, db: Session = Depen
     return new_apt
 
 @app.post('/addland', status_code=status.HTTP_201_CREATED)
-def createApartment(request: schemas.CreateLandRequest, db: Session = Depends(get_db)):
-    new_land = models.Land(
+def createApartment(request: CreateLandRequest, db: Session = Depends(get_db)):
+    new_land = Land(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -67,3 +67,24 @@ def createApartment(request: schemas.CreateLandRequest, db: Session = Depends(ge
     db.add(new_land)
     db.commit()
     return new_land
+
+@app.post('/gethouse')
+def listHouses(db: Session = Depends(get_db)):
+    houses = db.query(House).all()
+    if not houses:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no house stored.")
+    return houses
+
+@app.post('/getapt')
+def listHouses(db: Session = Depends(get_db)):
+    apts = db.query(Apartment).all()
+    if not apts:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no apartment stored.")
+    return apts
+
+@app.post('/getland')
+def listHouses(db: Session = Depends(get_db)):
+    lands = db.query(Land).all()
+    if not lands:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no land stored.")
+    return lands
