@@ -6,7 +6,7 @@ from .models import House, Apartment, Land
 
 app = FastAPI()
 
-@app.post('/addhouse', status_code=status.HTTP_201_CREATED)
+@app.post('/house', status_code=status.HTTP_201_CREATED)
 def createHouse(request: CreateHouseRequest, db: Session = Depends(get_db)):
     new_house = House(
         title = request.title, 
@@ -28,7 +28,7 @@ def createHouse(request: CreateHouseRequest, db: Session = Depends(get_db)):
     return new_house
 
 
-@app.post('/addapartment', status_code=status.HTTP_201_CREATED)
+@app.post('/apartment', status_code=status.HTTP_201_CREATED)
 def createApartment(request: CreateApartmentRequest, db: Session = Depends(get_db)):
     new_apt = Apartment(
         title = request.title, 
@@ -51,7 +51,7 @@ def createApartment(request: CreateApartmentRequest, db: Session = Depends(get_d
     db.refresh(new_apt)
     return new_apt
 
-@app.post('/addland', status_code=status.HTTP_201_CREATED)
+@app.post('/land', status_code=status.HTTP_201_CREATED)
 def createApartment(request: CreateLandRequest, db: Session = Depends(get_db)):
     new_land = Land(
         title = request.title, 
@@ -93,19 +93,38 @@ def listLands(db: Session = Depends(get_db)):
 def showHouse(id, response: Response, db: Session = Depends(get_db)):
     house = db.query(House).filter(House.id == id).first()
     if not house:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"House with {id} id was not found.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"House with id:{id} id was not found.")
     return house
 
 @app.get('/getapt/{id}', status_code=status.HTTP_302_FOUND)
 def showApt(id, response: Response, db: Session = Depends(get_db)):
     apt = db.query(Apartment).filter(Apartment.id == id).first()
     if not apt:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Apartment with {id} id was not found.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Apartment with id:{id} id was not found.")
     return apt
 
 @app.get('/getland/{id}', status_code=status.HTTP_302_FOUND)
 def showLand(id, response: Response, db: Session = Depends(get_db)):
     land = db.query(Land).filter(Land.id == id).first()
     if not land:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Real estate with {id} id was not found.")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Real estate with id:{id} was not found.")
     return land
+
+@app.delete('/house/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def deleteHouse(id, db: Session = Depends(get_db)):
+    db.query(House).filter(House.id == id).delete(synchronize_session=False)
+    db.commit()
+    return f'The house with id: {id} was deleted'
+
+@app.delete('/apartment/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def deleteApartment(id, db: Session = Depends(get_db)):
+    db.query(Apartment).filter(Apartment.id == id).delete(synchronize_session=False)
+    db.commit()
+    return f'The Apartment with id: {id} was deleted'
+
+@app.delete('/land/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def deleteLand(id, db: Session = Depends(get_db)):
+    db.query(Land).filter(Land.id == id).delete(synchronize_session=False)
+    db.commit()
+    return f'The real estate with id: {id} was deleted'
+
