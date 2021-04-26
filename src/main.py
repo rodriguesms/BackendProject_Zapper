@@ -68,23 +68,44 @@ def createApartment(request: CreateLandRequest, db: Session = Depends(get_db)):
     db.commit()
     return new_land
 
-@app.post('/gethouse')
+@app.get('/gethouse')
 def listHouses(db: Session = Depends(get_db)):
     houses = db.query(House).all()
     if not houses:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no house stored.")
     return houses
 
-@app.post('/getapt')
-def listHouses(db: Session = Depends(get_db)):
+@app.get('/getapt')
+def listApts(db: Session = Depends(get_db)):
     apts = db.query(Apartment).all()
     if not apts:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no apartment stored.")
     return apts
 
-@app.post('/getland')
-def listHouses(db: Session = Depends(get_db)):
+@app.get('/getland')
+def listLands(db: Session = Depends(get_db)):
     lands = db.query(Land).all()
     if not lands:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no land stored.")
     return lands
+
+@app.get('/gethouse/{id}', status_code=status.HTTP_302_FOUND)
+def showHouse(id, response: Response, db: Session = Depends(get_db)):
+    house = db.query(House).filter(House.id == id).first()
+    if not house:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"House with {id} id was not found.")
+    return house
+
+@app.get('/getapt/{id}', status_code=status.HTTP_302_FOUND)
+def showApt(id, response: Response, db: Session = Depends(get_db)):
+    apt = db.query(Apartment).filter(Apartment.id == id).first()
+    if not apt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Apartment with {id} id was not found.")
+    return apt
+
+@app.get('/getland/{id}', status_code=status.HTTP_302_FOUND)
+def showLand(id, response: Response, db: Session = Depends(get_db)):
+    land = db.query(Land).filter(Land.id == id).first()
+    if not land:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Real estate with {id} id was not found.")
+    return land
