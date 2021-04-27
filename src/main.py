@@ -230,6 +230,8 @@ def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
     db.commit() ### COMMIT CHANGE
     return f'House with {id} updated'
 
+### UPDATE APARTMENT
+
 @app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED)
 def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db)):
 
@@ -242,6 +244,8 @@ def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db))
     updatedHouse.update(request) ### UPDATING APARTMENT
     db.commit() ### COMMIT CHANGE
     return f'Apartment with {id} updated'
+
+### UPDATE LAND
 
 @app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED)
 def updateLand(id, request:LandRequest, db: Session = Depends(get_db)):
