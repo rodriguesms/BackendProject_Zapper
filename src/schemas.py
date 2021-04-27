@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class CreateHouseRequest(BaseModel):
+class HouseRequest(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -14,7 +14,7 @@ class CreateHouseRequest(BaseModel):
     definition: bool
     price: float
 
-class CreateApartmentRequest(BaseModel):
+class ApartmentRequest(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -30,7 +30,7 @@ class CreateApartmentRequest(BaseModel):
     sun_position: str
     price: float
 
-class CreateLandRequest(BaseModel):
+class LandRequest(BaseModel):
     title: str
     zip_code: str
     city: str
