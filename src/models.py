@@ -2,6 +2,14 @@ from sqlalchemy import Integer, String, Float, Boolean
 from .database import Base
 from sqlalchemy.sql.schema import Column
 
+class User(Base):
+    __tablename__ = 'Users'
+
+    id = Column(Integer(), primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+
 class House(Base):
     __tablename__ = 'Houses'
 

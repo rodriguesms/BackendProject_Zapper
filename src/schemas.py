@@ -1,5 +1,10 @@
 from pydantic import BaseModel
 
+class userRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+
 class HouseRequest(BaseModel):
     title: str
     zip_code: str
@@ -16,7 +21,7 @@ class HouseRequest(BaseModel):
 
 class responseHouse(BaseModel):
     title: str
-    
+
     class Config():
         orm_mode = True
 
