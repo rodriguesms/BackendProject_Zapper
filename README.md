@@ -22,6 +22,7 @@ This backend application was inspired by original Zapper, and represents not onl
 * SQLAlchemy
 * Psycopg2
 * Alembic
+* Passlib
 
 #### Database:
 
@@ -106,3 +107,9 @@ Alembic is a database migrations tool written by the author of SQLAlchemy. A mig
 _Source¹_: https://alembic.sqlalchemy.org/
 
 _Source²_: https://pypi.org/project/alembic/
+
+## Passlib
+
+Passlib is a password hashing library for Python 2 & 3, which provides cross-platform implementations of over 30 password hashing algorithms, as well as a framework for managing existing password hashes. It’s designed to be useful for a wide range of tasks, from verifying a hash found in /etc/shadow, to providing full-strength password hashing for multi-user application.
+
+_Source_: https://passlib.readthedocs.io/

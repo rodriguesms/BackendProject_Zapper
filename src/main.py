@@ -1,26 +1,26 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from .database import engine, SessionLocal, get_db
-from . import models
 from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand, userRequest
-from .models import House, Apartment, Land, User
+from .models import House, Apartment, Land, User, Base
+from .hashing import Hash
 from typing import List
 
 app = FastAPI()
 
-models.Base.metadata.create_all(engine)
+Base.metadata.create_all(engine) ### DINAMICALLY UPDATING DATABASE WITH NEW MODELS
 
 ### CREATE USER
 
 @app.post('/user', status_code=status.HTTP_201_CREATED)
 def createUser(request: userRequest, db: Session = Depends(get_db)):
-    
+
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
 
     new_user = User(
         name = request.name,
         email = request.email,
-        password = request.password
+        password = Hash.bcrypt(request.password) ### HASHING PASSWORD
     )
 
     ### ADDING NEW USER TO DATABASE
