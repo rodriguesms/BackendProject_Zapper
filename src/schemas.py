@@ -14,6 +14,12 @@ class HouseRequest(BaseModel):
     definition: bool
     price: float
 
+class responseHouse(BaseModel):
+    title: str
+    
+    class Config():
+        orm_mode = True
+
 class ApartmentRequest(BaseModel):
     title: str
     zip_code: str
@@ -30,6 +36,12 @@ class ApartmentRequest(BaseModel):
     sun_position: str
     price: float
 
+class responseApartment(BaseModel):
+    title: str
+
+    class Config():
+        orm_mode = True
+
 class LandRequest(BaseModel):
     title: str
     zip_code: str
@@ -40,3 +52,9 @@ class LandRequest(BaseModel):
     definition: bool
     area: float
     price: float
+
+class responseLand(BaseModel):
+    title: str
+
+    class Config():
+        orm_mode = True

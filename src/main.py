@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from .database import engine, SessionLocal, get_db
-from .schemas import ApartmentRequest, HouseRequest, LandRequest
+from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand
 from .models import House, Apartment, Land
+from typing import List
 
 app = FastAPI()
 
@@ -94,7 +95,7 @@ def createLand(request: LandRequest, db: Session = Depends(get_db)):
 
 ### GET ALL HOUSES
 
-@app.get('/gethouse')
+@app.get('/gethouse', response_model=List[responseHouse])
 def listHouses(db: Session = Depends(get_db)):
 
     houses = db.query(House).all() ### GET ALL HOUSES IN HOUSE TABLE FROM DATABASE
@@ -107,7 +108,7 @@ def listHouses(db: Session = Depends(get_db)):
 
 ### GET ALL APARTMENTS
 
-@app.get('/getapt')
+@app.get('/getapt', response_model=List[responseApartment])
 def listApts(db: Session = Depends(get_db)):
 
     apts = db.query(Apartment).all() ### GET ALL APARTMENTS IN APARTMENT TABLE FROM DATABASE
@@ -120,7 +121,7 @@ def listApts(db: Session = Depends(get_db)):
 
 ### GET ALL LANDS
 
-@app.get('/getland')
+@app.get('/getland', response_model=List[responseLand])
 def listLands(db: Session = Depends(get_db)):
 
     lands = db.query(Land).all() ### GET ALL LANDS IN LANDS TABLE FROM DATABASE
@@ -133,7 +134,7 @@ def listLands(db: Session = Depends(get_db)):
 
 ### GET HOUSE BY ID
 
-@app.get('/gethouse/{id}', status_code=status.HTTP_302_FOUND)
+@app.get('/gethouse/{id}', status_code=200, response_model=responseHouse)
 def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
     house = db.query(House).filter(House.id == id).first() ### QUERY HOUSE BY ID
@@ -146,7 +147,7 @@ def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET APARTMENT BY ID
 
-@app.get('/getapt/{id}', status_code=status.HTTP_302_FOUND)
+@app.get('/getapt/{id}', status_code=200,response_model=responseApartment)
 def showApt(id, response: Response, db: Session = Depends(get_db)):
 
     apt = db.query(Apartment).filter(Apartment.id == id).first() ### QUERY APARTMENT BY ID
@@ -159,7 +160,7 @@ def showApt(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET LAND BY ID
 
-@app.get('/getland/{id}', status_code=status.HTTP_302_FOUND)
+@app.get('/getland/{id}', status_code=200, response_model=responseLand)
 def showLand(id, response: Response, db: Session = Depends(get_db)):
 
     land = db.query(Land).filter(Land.id == id).first() ### QUERY LAND BY ID
