@@ -13,16 +13,19 @@ This backend application was inspired by original Zapper, and represents not onl
 
 #### Main programming language:
 
-* Python 3.6+
+* Python
 
 #### Frameworks used:
 
 * FastAPI
 * Uvicorn
 * SQLAlchemy
-* PostgreSQL
 * Psycopg2
 * Alembic
+
+#### Database:
+
+* PostgreSQL
 
 ## FastAPI
 
