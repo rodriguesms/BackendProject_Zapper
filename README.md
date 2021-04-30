@@ -11,22 +11,202 @@ Originally, Zapper project was conceived using C/C++ in my Computer Enginnering 
 The first project was developed using text files as an improvised database, and was able to register houses, apartments and lands for sale or rent. The user was be able to consult any registered property, filtering results by property type, price, or even the address.
 This backend application was inspired by original Zapper, and represents not only a Zapper project update, but an update to myself as a developer.
 
+### House Schema
+
+<table>
+    <tr>
+        <th colspan="2">Houses</th>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <th>Data</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Title</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Zip Code</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>City</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Neighborhood</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Street</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Address Number</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Floors</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Rooms</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Land Area</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Occupied Area</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Floors</th>
+    </tr>
+    <tr>
+        <th><i>Bool</i></th>
+        <th>Advertisement Definition</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Price</th>
+    </tr>
+</table>
+
+### Apartment Schema
+
+<table>
+    <tr>
+        <th colspan="2">Apartments</th>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <th>Data</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Title</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Zip Code</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>City</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Neighborhood</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Street</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Address Number</th>
+    </tr>
+    <tr>
+        <th><i>Bool</i></th>
+        <th>Advertisement Definition</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Area</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Condominium Price</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Rooms</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Floor</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Parking Spaces</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Sun Position</th>      
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Price</th>      
+    </tr>   
+</table>
+
+### Land Schema
+
+<table>
+    <tr>
+        <th colspan="2">Land</th>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <th>Data</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Title</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Zip Code</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>City</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Neighborhood</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>Street</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Address Number</th>
+    </tr>
+    <tr>
+        <th><i>Bool</i></th>
+        <th>Advertisement Definition</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Land Area</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Price</th>
+    </tr>
+</table>
+
 #### Main programming language:
 
 * Python
 
 #### Frameworks used:
 
-* FastAPI
-* Uvicorn
-* SQLAlchemy
-* Psycopg2
-* Alembic
-* Passlib
+* [FastAPI](##FastAPI)
+* [Uvicorn](##Uvicorn)
+* [SQLAlchemy](##SQLAlchemy)
+* [Psycopg2](##Psycopg2)
+* [Alembic](##Alembic)
+* [Passlib](##Passlib)
 
 #### Database:
 
-* PostgreSQL
+* [PostgreSQL](##PostgreSQL)
 
 ## FastAPI
 

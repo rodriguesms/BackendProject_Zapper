@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from .database import engine, SessionLocal, get_db
-from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand, userRequest
+from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand, userRequest, responseUser
 from .models import House, Apartment, Land, User, Base
 from .hashing import Hash
 from typing import List
@@ -12,7 +12,7 @@ Base.metadata.create_all(engine) ### DINAMICALLY UPDATING DATABASE WITH NEW MODE
 
 ### CREATE USER
 
-@app.post('/user', status_code=status.HTTP_201_CREATED)
+@app.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
 def createUser(request: userRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
@@ -33,7 +33,7 @@ def createUser(request: userRequest, db: Session = Depends(get_db)):
 
 ### CREATE HOUSE
 
-@app.post('/house', status_code=status.HTTP_201_CREATED)
+@app.post('/house', status_code=status.HTTP_201_CREATED, tags=['houses'])
 def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
     
     ### CREATING NEW HOUSE OBJECT USING HOUSE SCHEMA ON REQUEST
@@ -62,7 +62,7 @@ def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
 
 ### CREATE APARTMENT
 
-@app.post('/apartment', status_code=status.HTTP_201_CREATED)
+@app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartment'])
 def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
@@ -117,16 +117,30 @@ def createLand(request: LandRequest, db: Session = Depends(get_db)):
     db.refresh(new_land)
     return new_land
 
+### GET ALL USERS
+
+@app.get('/getuser', response_model=List[responseUser], tags=['users'])
+def listUsers(db: Session = Depends(get_db)):
+    
+    users = db.query(User).all() ### GET ALL USERS IN USER TABLE FROM DATABASE
+
+    if not users: ### IF THERE IS NO USER REGISTERED: RAISE EXCEPTION
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail="There is no user registered.")
+
+    return users
+
+
 ### GET ALL HOUSES
 
-@app.get('/gethouse', response_model=List[responseHouse])
+@app.get('/gethouse', response_model=List[responseHouse], tags=['houses'])
 def listHouses(db: Session = Depends(get_db)):
 
     houses = db.query(House).all() ### GET ALL HOUSES IN HOUSE TABLE FROM DATABASE
 
     if not houses: ### IF THERE IS NO HOUSE REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-        detail=f"There is no house stored.")
+        detail="There is no house stored.")
 
     return houses
 
@@ -139,7 +153,7 @@ def listApts(db: Session = Depends(get_db)):
 
     if not apts: ### IF THERE IS NO APARTMENT REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-        detail=f"There is no apartment stored.")
+        detail="There is no apartment stored.")
 
     return apts
 
@@ -152,13 +166,26 @@ def listLands(db: Session = Depends(get_db)):
 
     if not lands: ### IF THERE IS NO LAND REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-        detail=f"There is no land stored.")
+        detail="There is no land stored.")
 
     return lands
 
+### GET USER BY ID
+
+@app.get('/getuser/{id}', status_code=200, response_model=responseUser, tags=['users'])
+def showUser(id, response: Response, db: Session = Depends(get_db)):
+
+    user = db.query(User).filter(User.id == id).first() ### QUERY USER BY ID
+
+    if not user: ### IF USER ID WAS NOT FOUND: RAISE EXCEPTION
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"User with id:{id} was not found")
+
+    return user
+
 ### GET HOUSE BY ID
 
-@app.get('/gethouse/{id}', status_code=200, response_model=responseHouse)
+@app.get('/gethouse/{id}', status_code=200, response_model=responseHouse, tags=['houses'])
 def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
     house = db.query(House).filter(House.id == id).first() ### QUERY HOUSE BY ID
@@ -197,7 +224,7 @@ def showLand(id, response: Response, db: Session = Depends(get_db)):
 
 ### DELETE HOUSE
 
-@app.delete('/house/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@app.delete('/house/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['houses'])
 def deleteHouse(id, db: Session = Depends(get_db)):
 
     deletedHouse = db.query(House).filter(House.id == id) ### QUERY HOUSE BY ID
@@ -242,7 +269,7 @@ def deleteLand(id, db: Session = Depends(get_db)):
 
 ### UPDATE HOUSE
 
-@app.put('/house/{id}', status_code=status.HTTP_202_ACCEPTED)
+@app.put('/house/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
 def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
 
     updatedHouse = db.query(House).filter(House.id == id) ### QUERY BY HOUSE ID

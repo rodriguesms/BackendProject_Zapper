@@ -5,6 +5,13 @@ class userRequest(BaseModel):
     email: str
     password: str
 
+class responseUser(BaseModel):
+    name: str
+    email: str
+
+    class Config():
+        orm_mode = True
+
 class HouseRequest(BaseModel):
     title: str
     zip_code: str
