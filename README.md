@@ -11,189 +11,153 @@ Originally, Zapper project was conceived using C/C++ in my Computer Enginnering 
 The first project was developed using text files as an improvised database, and was able to register houses, apartments and lands for sale or rent. The user was be able to consult any registered property, filtering results by property type, price, or even the address.
 This backend application was inspired by original Zapper, and represents not only a Zapper project update, but an update to myself as a developer.
 
-<div style="align: center;">
-
-### House Schema
+### Data Schemas
 
 <table>
     <tr>
         <th colspan="2">Houses</th>
-    </tr>
-    <tr>
-        <th>Type</th>
-        <th>Data</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Title</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Zip Code</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>City</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Neighborhood</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Street</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Address Number</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Number of Floors</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Number of Rooms</th>
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Land Area</th>
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Occupied Area</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Number of Floors</th>
-    </tr>
-    <tr>
-        <th><i>Bool</i></th>
-        <th>Advertisement Definition</th>
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Price</th>
-    </tr>
-</table>
-
-### Apartment Schema
-
-<table>
-    <tr>
         <th colspan="2">Apartments</th>
-    </tr>
-    <tr>
-        <th>Type</th>
-        <th>Data</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Title</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Zip Code</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>City</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Neighborhood</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Street</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Address Number</th>
-    </tr>
-    <tr>
-        <th><i>Bool</i></th>
-        <th>Advertisement Definition</th>
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Area</th>
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Condominium Price</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Number of Rooms</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Floor</th>
-    </tr>
-    <tr>
-        <th><i>Integer</i></th>
-        <th>Parking Spaces</th>
-    </tr>
-    <tr>
-        <th><i>String</i></th>
-        <th>Sun Position</th>      
-    </tr>
-    <tr>
-        <th><i>Float</i></th>
-        <th>Price</th>      
-    </tr>   
-</table>
-
-### Land Schema
-
-<table>
-    <tr>
         <th colspan="2">Lands</th>
     </tr>
     <tr>
         <th>Type</th>
         <th>Data</th>
+        <th>Type</th>
+        <th>Data</th>
+        <th>Type</th>
+        <th>Data</th>
     </tr>
     <tr>
+        <th><i>String</i></th>
+        <th>Title</th>
+        <th><i>String</i></th>
+        <th>Title</th>
         <th><i>String</i></th>
         <th>Title</th>
     </tr>
     <tr>
         <th><i>String</i></th>
         <th>Zip Code</th>
+        <th><i>String</i></th>
+        <th>Zip Code</th>
+        <th><i>String</i></th>
+        <th>Zip Code</th>
     </tr>
     <tr>
+        <th><i>String</i></th>
+        <th>City</th>
+        <th><i>String</i></th>
+        <th>City</th>
         <th><i>String</i></th>
         <th>City</th>
     </tr>
     <tr>
         <th><i>String</i></th>
         <th>Neighborhood</th>
+        <th><i>String</i></th>
+        <th>Neighborhood</th>
+        <th><i>String</i></th>
+        <th>Neighborhood</th>
     </tr>
     <tr>
+        <th><i>String</i></th>
+        <th>Street</th>
+        <th><i>String</i></th>
+        <th>Street</th>
         <th><i>String</i></th>
         <th>Street</th>
     </tr>
     <tr>
         <th><i>Integer</i></th>
         <th>Address Number</th>
+        <th><i>Integer</i></th>
+        <th>Address Number</th>
+        <th><i>Integer</i></th>
+        <th>Address Number</th>
     </tr>
     <tr>
+        <th><i>Bool</i></th>
+        <th>Advertisement Definition</th>
+        <th><i>Bool</i></th>
+        <th>Advertisement Definition</th>
         <th><i>Bool</i></th>
         <th>Advertisement Definition</th>
     </tr>
     <tr>
         <th><i>Float</i></th>
-        <th>Land Area</th>
+        <th>Total Area</th>
+        <th><i>Float</i></th>
+        <th>Area</th>
+        <th><i>Float</i></th>
+        <th>Area</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>Constructed Area</th>
+        <th><i>Float</i></th>
+        <th>-</th>
+        <th><i>Float</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>Float</i></th>
+        <th>-</th>
+        <th><i>Float</i></th>
+        <th>Condominium Price</th>
+        <th><i>Float</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Rooms</th>
+        <th><i>Integer</i></th>
+        <th>Number of Rooms</th>
+        <th><i>Integer</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>Number of Floors</th>
+        <th><i>Integer</i></th>
+        <th>-</th>
+        <th><i>Integer</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>-</th>
+        <th><i>Integer</i></th>
+        <th>Floor</th>
+        <th><i>Integer</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>Integer</i></th>
+        <th>-</th>
+        <th><i>Integer</i></th>
+        <th>Parking Spaces</th>
+        <th><i>Integer</i></th>
+        <th>-</th>
+    </tr>
+    <tr>
+        <th><i>String</i></th>
+        <th>-</th>  
+        <th><i>String</i></th>
+        <th>Sun Position</th>
+        <th><i>String</i></th>
+        <th>-</th>      
     </tr>
     <tr>
         <th><i>Float</i></th>
         <th>Price</th>
-    </tr>
+        <th><i>Float</i></th>
+        <th>Price</th>  
+        <th><i>Float</i></th>
+        <th>Price</th>        
+    </tr>   
 </table>
 
-</div>
+
 
 #### Main programming language:
 
