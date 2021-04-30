@@ -11,6 +11,8 @@ Originally, Zapper project was conceived using C/C++ in my Computer Enginnering 
 The first project was developed using text files as an improvised database, and was able to register houses, apartments and lands for sale or rent. The user was be able to consult any registered property, filtering results by property type, price, or even the address.
 This backend application was inspired by original Zapper, and represents not only a Zapper project update, but an update to myself as a developer.
 
+<div style="align: center;">
+
 ### House Schema
 
 <table>
@@ -147,7 +149,7 @@ This backend application was inspired by original Zapper, and represents not onl
 
 <table>
     <tr>
-        <th colspan="2">Land</th>
+        <th colspan="2">Lands</th>
     </tr>
     <tr>
         <th>Type</th>
@@ -190,6 +192,8 @@ This backend application was inspired by original Zapper, and represents not onl
         <th>Price</th>
     </tr>
 </table>
+
+</div>
 
 #### Main programming language:
 
