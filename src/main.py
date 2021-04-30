@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from .database import engine, SessionLocal, get_db
-from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand, userRequest, responseUser
+from .schemas import ApartmentBase, responseApartment, HouseBase, responseHouse, LandBase, responseLand, userBase, responseUser
 from .models import House, Apartment, Land, User, Base
 from .hashing import Hash
 from typing import List
@@ -13,7 +13,7 @@ Base.metadata.create_all(engine) ### DINAMICALLY UPDATING DATABASE WITH NEW MODE
 ### CREATE USER
 
 @app.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
-def createUser(request: userRequest, db: Session = Depends(get_db)):
+def createUser(request: userBase, db: Session = Depends(get_db)):
 
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
 
@@ -34,8 +34,16 @@ def createUser(request: userRequest, db: Session = Depends(get_db)):
 ### CREATE HOUSE
 
 @app.post('/house', status_code=status.HTTP_201_CREATED, tags=['houses'])
-def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
+def createHouse(request: HouseBase, userData: userBase, db: Session = Depends(get_db)):
     
+    ### HANDLING USER TO GET ID FROM DATABASE
+
+    user = db.query(User).filter(User.email == userData.email).first() ### QUERY USER BY EMAIL
+
+    if not user: ### IF NOT FOUND ??? NOT REGISTERED
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail="This user is not registered.")
+
     ### CREATING NEW HOUSE OBJECT USING HOUSE SCHEMA ON REQUEST
 
     new_house = House(
@@ -50,7 +58,8 @@ def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
         land_area = request.land_area, 
         area  = request.area, 
         definition = request.definition, 
-        price = request.price
+        price = request.price,
+        user_id = user.id
     )
 
     ### ADDING NEW HOUSE TO DATABASE
@@ -63,7 +72,15 @@ def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
 ### CREATE APARTMENT
 
 @app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartments'])
-def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
+def createApartment(request: ApartmentBase, userData: userBase, db: Session = Depends(get_db)):
+
+    ### HANDLING USER TO GET ID FROM DATABASE
+
+    user = db.query(User).filter(User.email == userData.email).first() ### QUERY USER BY EMAIL
+
+    if not user: ### IF NOT FOUND ??? NOT REGISTERED
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail="This user is not registered.")
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
 
@@ -81,7 +98,8 @@ def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
         floor = request.floor,
         garage_spots = request.garage_spots,
         sun_position = request.sun_position,
-        price = request.price
+        price = request.price,
+        user_id = user.id
     )
 
     ### ADDING NEW APARTMENT TO DATABASE
@@ -94,7 +112,15 @@ def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
 ### CREATE LAND
 
 @app.post('/land', status_code=status.HTTP_201_CREATED, tags=['lands'])
-def createLand(request: LandRequest, db: Session = Depends(get_db)):
+def createLand(request: LandBase, userData: userBase, db: Session = Depends(get_db)):
+
+    ### HANDLING USER TO GET ID FROM DATABASE
+
+    user = db.query(User).filter(User.email == userData.email).first() ### QUERY USER BY EMAIL
+
+    if not user: ### IF NOT FOUND ??? NOT REGISTERED
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail="This user is not registered.")
 
     ### CREATING NEW LAND OBJECT USING LAND SCHEMA ON REQUEST
 
@@ -107,7 +133,8 @@ def createLand(request: LandRequest, db: Session = Depends(get_db)):
         number = request.number, 
         definition = request.definition,
         area  = request.area,
-        price = request.price
+        price = request.price,
+        user_id = user.id
     )
 
     ### ADDING NEW LAND TO DATABASE
@@ -270,7 +297,7 @@ def deleteLand(id, db: Session = Depends(get_db)):
 ### UPDATE HOUSE
 
 @app.put('/house/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
-def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
+def updateHouse(id, request:HouseBase, db: Session = Depends(get_db)):
 
     updatedHouse = db.query(House).filter(House.id == id) ### QUERY BY HOUSE ID
 
@@ -285,7 +312,7 @@ def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
 ### UPDATE APARTMENT
 
 @app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['apartments'])
-def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db)):
+def updateApartment(id, request:ApartmentBase, db: Session = Depends(get_db)):
 
     updatedApartment = db.query(Apartment).filter(Apartment.id == id) ### QUERY BY APARTMENT ID
 
@@ -300,7 +327,7 @@ def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db))
 ### UPDATE LAND
 
 @app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['lands'])
-def updateLand(id, request:LandRequest, db: Session = Depends(get_db)):
+def updateLand(id, request:LandBase, db: Session = Depends(get_db)):
 
     updatedLand = db.query(Land).filter(Land.id == id) ### QUERY BY LAND ID
 
