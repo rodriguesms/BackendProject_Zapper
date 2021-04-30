@@ -62,7 +62,7 @@ def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
 
 ### CREATE APARTMENT
 
-@app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartment'])
+@app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartments'])
 def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
@@ -93,7 +93,7 @@ def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
 
 ### CREATE LAND
 
-@app.post('/land', status_code=status.HTTP_201_CREATED)
+@app.post('/land', status_code=status.HTTP_201_CREATED, tags=['lands'])
 def createLand(request: LandRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW LAND OBJECT USING LAND SCHEMA ON REQUEST
@@ -146,7 +146,7 @@ def listHouses(db: Session = Depends(get_db)):
 
 ### GET ALL APARTMENTS
 
-@app.get('/getapt', response_model=List[responseApartment])
+@app.get('/getapt', response_model=List[responseApartment], tags=['apartments'])
 def listApts(db: Session = Depends(get_db)):
 
     apts = db.query(Apartment).all() ### GET ALL APARTMENTS IN APARTMENT TABLE FROM DATABASE
@@ -159,7 +159,7 @@ def listApts(db: Session = Depends(get_db)):
 
 ### GET ALL LANDS
 
-@app.get('/getland', response_model=List[responseLand])
+@app.get('/getland', response_model=List[responseLand], tags=['lands'])
 def listLands(db: Session = Depends(get_db)):
 
     lands = db.query(Land).all() ### GET ALL LANDS IN LANDS TABLE FROM DATABASE
@@ -198,7 +198,7 @@ def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET APARTMENT BY ID
 
-@app.get('/getapt/{id}', status_code=200,response_model=responseApartment)
+@app.get('/getapt/{id}', status_code=200,response_model=responseApartment, tags=['apartments'])
 def showApt(id, response: Response, db: Session = Depends(get_db)):
 
     apt = db.query(Apartment).filter(Apartment.id == id).first() ### QUERY APARTMENT BY ID
@@ -211,7 +211,7 @@ def showApt(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET LAND BY ID
 
-@app.get('/getland/{id}', status_code=200, response_model=responseLand)
+@app.get('/getland/{id}', status_code=200, response_model=responseLand, tags=['lands'])
 def showLand(id, response: Response, db: Session = Depends(get_db)):
 
     land = db.query(Land).filter(Land.id == id).first() ### QUERY LAND BY ID
@@ -239,7 +239,7 @@ def deleteHouse(id, db: Session = Depends(get_db)):
 
 ### DELETE APARTMENT
 
-@app.delete('/apartment/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@app.delete('/apartment/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['apartments'])
 def deleteApartment(id, db: Session = Depends(get_db)):
 
     deletedApartment = db.query(Apartment).filter(Apartment.id == id) ### QUERY APARTMENT BY ID
@@ -254,7 +254,7 @@ def deleteApartment(id, db: Session = Depends(get_db)):
 
 ### DELETE LAND
 
-@app.delete('/land/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@app.delete('/land/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['lands'])
 def deleteLand(id, db: Session = Depends(get_db)): 
 
     deletedLand = db.query(Land).filter(Land.id == id) ### QUERY LAND BY ID
@@ -284,7 +284,7 @@ def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
 
 ### UPDATE APARTMENT
 
-@app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED)
+@app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['apartments'])
 def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db)):
 
     updatedApartment = db.query(Apartment).filter(Apartment.id == id) ### QUERY BY APARTMENT ID
@@ -299,7 +299,7 @@ def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db))
 
 ### UPDATE LAND
 
-@app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED)
+@app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['lands'])
 def updateLand(id, request:LandRequest, db: Session = Depends(get_db)):
 
     updatedLand = db.query(Land).filter(Land.id == id) ### QUERY BY LAND ID
