@@ -1,12 +1,18 @@
 from pydantic import BaseModel
-from typing import List
 
-class userBase(BaseModel):
+class userRequest(BaseModel):
     name: str
     email: str
     password: str
 
-class HouseBase(BaseModel):
+class responseUser(BaseModel):
+    name: str
+    email: str
+
+    class Config():
+        orm_mode = True
+
+class HouseRequest(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -20,7 +26,13 @@ class HouseBase(BaseModel):
     definition: bool
     price: float
 
-class ApartmentBase(BaseModel):
+class responseHouse(BaseModel):
+    title: str
+
+    class Config():
+        orm_mode = True
+
+class ApartmentRequest(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -36,7 +48,13 @@ class ApartmentBase(BaseModel):
     sun_position: str
     price: float
 
-class LandBase(BaseModel):
+class responseApartment(BaseModel):
+    title: str
+
+    class Config():
+        orm_mode = True
+
+class LandRequest(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -47,41 +65,8 @@ class LandBase(BaseModel):
     area: float
     price: float
 
-class House(HouseBase):
-    class Config():
-        orm_mode = True
-
-class Apartment(ApartmentBase):
-    class Config():
-        orm_mode = True
-
-class Land(LandBase):
-    class Config():
-        orm_mode = True
-
-class responseUser(BaseModel):
-    name: str
-    email: str
-    houses: List[House] = []
-    apartments: List[Apartment] = []
-    lands: List[Land] = []
-    class Config():
-        orm_mode = True
-
-class responseHouse(BaseModel):
-    title: str
-    announcer: responseUser
-    class Config():
-        orm_mode = True
-
-class responseApartment(BaseModel):
-    title: str
-    announcer: responseUser
-    class Config():
-        orm_mode = True
-
 class responseLand(BaseModel):
     title: str
-    announcer: responseUser
+
     class Config():
         orm_mode = True
