@@ -3,11 +3,14 @@ from fastapi import APIRouter, Depends, status, Response
 from .. import schemas, database, models
 from sqlalchemy.orm import Session
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/apartment",
+    tags=['Apartments']
+)
 
 ### CREATE APARTMENT
 
-@router.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartments'])
+@router.post('/create', status_code=status.HTTP_201_CREATED)
 def createApartment(request: schemas.ApartmentBase, db: Session = Depends(database.get_db)):
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
@@ -39,7 +42,7 @@ def createApartment(request: schemas.ApartmentBase, db: Session = Depends(databa
 
 ### GET ALL APARTMENTS
 
-@router.get('/getapt', response_model=List[schemas.responseApartment], tags=['apartments'])
+@router.get('/getall', response_model=List[schemas.responseApartment])
 def listApts(db: Session = Depends(database.get_db)):
 
     apts = db.query(models.Apartment).all() ### GET ALL APARTMENTS IN APARTMENT TABLE FROM DATABASE
@@ -52,7 +55,7 @@ def listApts(db: Session = Depends(database.get_db)):
 
 ### GET APARTMENT BY ID
 
-@router.get('/getapt/{id}', status_code=200,response_model=schemas.responseApartment, tags=['apartments'])
+@router.get('/get/{id}', status_code=200,response_model=schemas.responseApartment)
 def showApt(id, response: Response, db: Session = Depends(database.get_db)):
 
     apt = db.query(models.Apartment).filter(models.Apartment.id == id).first() ### QUERY APARTMENT BY ID
@@ -65,7 +68,7 @@ def showApt(id, response: Response, db: Session = Depends(database.get_db)):
 
 ### DELETE APARTMENT
 
-@router.delete('/apartment/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['apartments'])
+@router.delete('/delete/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def deleteApartment(id, db: Session = Depends(database.get_db)):
 
     deletedApartment = db.query(models.Apartment).filter(models.Apartment.id == id) ### QUERY APARTMENT BY ID
@@ -80,7 +83,7 @@ def deleteApartment(id, db: Session = Depends(database.get_db)):
 
 ### UPDATE APARTMENT
 
-@router.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['apartments'])
+@router.put('/update/{id}', status_code=status.HTTP_202_ACCEPTED)
 def updateApartment(id, request:schemas.ApartmentBase, db: Session = Depends(database.get_db)):
 
     apartment = db.query(models.Apartment).filter(models.Apartment.id == id) ### QUERY BY APARTMENT ID

@@ -3,11 +3,14 @@ from fastapi import APIRouter, Depends, status, Response
 from .. import schemas, database, models
 from sqlalchemy.orm import Session
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/house",
+    tags=['Houses']
+)
 
 ### GET ALL HOUSES
 
-@router.get('/gethouse', response_model=List[schemas.responseHouse], tags=['houses'])
+@router.get('/getall', response_model=List[schemas.responseHouse])
 def listHouses(db: Session = Depends(database.get_db)):
 
     houses = db.query(models.House).all() ### GET ALL HOUSES IN HOUSE TABLE FROM DATABASE
@@ -20,7 +23,7 @@ def listHouses(db: Session = Depends(database.get_db)):
 
 ### CREATE HOUSE
 
-@router.post('/house', status_code=status.HTTP_201_CREATED, tags=['houses'])
+@router.post('/create', status_code=status.HTTP_201_CREATED)
 def createHouse(request: schemas.HouseBase, db: Session = Depends(database.get_db)):
     
     ### CREATING NEW HOUSE OBJECT USING HOUSE SCHEMA ON REQUEST
@@ -50,7 +53,7 @@ def createHouse(request: schemas.HouseBase, db: Session = Depends(database.get_d
 
 ### GET HOUSE BY ID
 
-@router.get('/gethouse/{id}', status_code=200, response_model=schemas.responseHouse, tags=['houses'])
+@router.get('/get/{id}', status_code=200, response_model=schemas.responseHouse)
 def showHouse(id, response: Response, db: Session = Depends(database.get_db)):
 
     house = db.query(models.House).filter(models.House.id == id).first() ### QUERY HOUSE BY ID
@@ -63,7 +66,7 @@ def showHouse(id, response: Response, db: Session = Depends(database.get_db)):
 
 ### DELETE HOUSE
 
-@router.delete('/deletehouse/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['houses'])
+@router.delete('/delete/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def deleteHouse(id, db: Session = Depends(database.get_db)):
 
     db.query(models.House).filter(models.House.id == id).delete(synchronize_session=False)
@@ -72,7 +75,7 @@ def deleteHouse(id, db: Session = Depends(database.get_db)):
 
 ### UPDATE HOUSE
 
-@router.put('/updateHouse/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
+@router.put('/update/{id}', status_code=status.HTTP_202_ACCEPTED)
 def updateHouse(id, request: schemas.HouseBase, db: Session = Depends(database.get_db)):
     
     house = db.query(models.House).filter(models.House.id == id) ### QUERY BI HOUSE ID

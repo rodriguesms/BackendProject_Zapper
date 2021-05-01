@@ -4,11 +4,14 @@ from .. import schemas, database, models, hashing
 from sqlalchemy.orm import Session
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/user",
+    tags=['Users']
+)
 
 ### CREATE USER
 
-@router.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
+@router.post('/create', status_code=status.HTTP_201_CREATED)
 def createUser(request: schemas.User, db: Session = Depends(database.get_db)):
 
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
@@ -28,7 +31,7 @@ def createUser(request: schemas.User, db: Session = Depends(database.get_db)):
 
 ### GET ALL USERS
 
-@router.get('/getuser', response_model=List[schemas.ShowUser], tags=['users'])
+@router.get('/getall', response_model=List[schemas.ShowUser])
 def listUsers(db: Session = Depends(database.get_db)):
     
     users = db.query(models.User).all() ### GET ALL USERS IN USER TABLE FROM DATABASE
@@ -41,7 +44,7 @@ def listUsers(db: Session = Depends(database.get_db)):
 
 ### GET USER BY ID
 
-@router.get('/getuser/{id}', status_code=200, response_model=schemas.ShowUser, tags=['users'])
+@router.get('/get/{id}', status_code=200, response_model=schemas.ShowUser)
 def showUser(id, response: Response, db: Session = Depends(database.get_db)):
 
     user = db.query(models.User).filter(models.User.id == id).first() ### QUERY USER BY ID
