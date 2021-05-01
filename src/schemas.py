@@ -1,18 +1,13 @@
+from typing import List
 from pydantic import BaseModel
 
-class userRequest(BaseModel):
+
+class User(BaseModel):
     name: str
     email: str
     password: str
 
-class responseUser(BaseModel):
-    name: str
-    email: str
-
-    class Config():
-        orm_mode = True
-
-class House(BaseModel):
+class HouseBase(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -26,13 +21,11 @@ class House(BaseModel):
     definition: bool
     price: float
 
-class responseHouse(BaseModel):
-    title: str
-
+class House(HouseBase):
     class Config():
         orm_mode = True
 
-class ApartmentRequest(BaseModel):
+class ApartmentBase(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -48,13 +41,11 @@ class ApartmentRequest(BaseModel):
     sun_position: str
     price: float
 
-class responseApartment(BaseModel):
-    title: str
-
+class Apartment(ApartmentBase):
     class Config():
         orm_mode = True
 
-class LandRequest(BaseModel):
+class LandBase(BaseModel):
     title: str
     zip_code: str
     city: str
@@ -65,8 +56,76 @@ class LandRequest(BaseModel):
     area: float
     price: float
 
+class Land(LandBase):
+    class Config():
+        orm_mode = True
+
+class ShowUser(BaseModel):
+    name: str
+    email: str
+    houses: List[House] = []
+    apartments: List[Apartment] = []
+    lands: List[Land] = []
+    class Config():
+        orm_mode = True
+
+class ShowUserPersonalInfo(BaseModel):
+    name: str
+    email: str
+    class Config():
+        orm_mode = True
+
+class responseHouse(BaseModel):
+    title: str
+    zip_code: str
+    city: str
+    neighborhood: str
+    street: str
+    number: int
+    floor_quant: int
+    rooms: int
+    land_area: float
+    area: float
+    definition: bool
+    price: float
+    owner: ShowUserPersonalInfo
+
+    class Config():
+        orm_mode = True
+
+
+
+class responseApartment(BaseModel):
+    title: str
+    zip_code: str
+    city: str
+    neighborhood: str
+    street: str
+    number: int
+    definition: bool
+    area: float
+    condom_value: float
+    rooms: int
+    floor: int
+    garage_spots: int
+    sun_position: str
+    price: float
+    owner: ShowUserPersonalInfo
+
+    class Config():
+        orm_mode = True
+
 class responseLand(BaseModel):
     title: str
+    zip_code: str
+    city: str
+    neighborhood: str
+    street: str
+    number: int
+    definition: bool
+    area: float
+    price: float
+    owner:ShowUserPersonalInfo
 
     class Config():
         orm_mode = True

@@ -13,7 +13,7 @@ get_db = database.get_db
 ### CREATE USER
 
 @app.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
-def createUser(request: schemas.userRequest, db: Session = Depends(get_db)):
+def createUser(request: schemas.User, db: Session = Depends(get_db)):
 
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
 
@@ -34,7 +34,7 @@ def createUser(request: schemas.userRequest, db: Session = Depends(get_db)):
 ### CREATE HOUSE
 
 @app.post('/house', status_code=status.HTTP_201_CREATED, tags=['houses'])
-def createHouse(request: schemas.House, db: Session = Depends(get_db)):
+def createHouse(request: schemas.HouseBase, db: Session = Depends(get_db)):
     
     ### CREATING NEW HOUSE OBJECT USING HOUSE SCHEMA ON REQUEST
 
@@ -50,7 +50,8 @@ def createHouse(request: schemas.House, db: Session = Depends(get_db)):
         land_area = request.land_area, 
         area  = request.area, 
         definition = request.definition, 
-        price = request.price
+        price = request.price,
+        owner_id = 1
     )
 
     ### ADDING NEW HOUSE TO DATABASE
@@ -63,7 +64,7 @@ def createHouse(request: schemas.House, db: Session = Depends(get_db)):
 ### CREATE APARTMENT
 
 @app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartments'])
-def createApartment(request: schemas.ApartmentRequest, db: Session = Depends(get_db)):
+def createApartment(request: schemas.ApartmentBase, db: Session = Depends(get_db)):
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
 
@@ -81,7 +82,8 @@ def createApartment(request: schemas.ApartmentRequest, db: Session = Depends(get
         floor = request.floor,
         garage_spots = request.garage_spots,
         sun_position = request.sun_position,
-        price = request.price
+        price = request.price,
+        owner_id = 1
     )
 
     ### ADDING NEW APARTMENT TO DATABASE
@@ -94,7 +96,7 @@ def createApartment(request: schemas.ApartmentRequest, db: Session = Depends(get
 ### CREATE LAND
 
 @app.post('/land', status_code=status.HTTP_201_CREATED, tags=['lands'])
-def createLand(request: schemas.LandRequest, db: Session = Depends(get_db)):
+def createLand(request: schemas.LandBase, db: Session = Depends(get_db)):
 
     ### CREATING NEW LAND OBJECT USING LAND SCHEMA ON REQUEST
 
@@ -107,7 +109,8 @@ def createLand(request: schemas.LandRequest, db: Session = Depends(get_db)):
         number = request.number, 
         definition = request.definition,
         area  = request.area,
-        price = request.price
+        price = request.price,
+        owner_id = 1    
     )
 
     ### ADDING NEW LAND TO DATABASE
@@ -119,7 +122,7 @@ def createLand(request: schemas.LandRequest, db: Session = Depends(get_db)):
 
 ### GET ALL USERS
 
-@app.get('/getuser', response_model=List[schemas.responseUser], tags=['users'])
+@app.get('/getuser', response_model=List[schemas.ShowUser], tags=['users'])
 def listUsers(db: Session = Depends(get_db)):
     
     users = db.query(models.User).all() ### GET ALL USERS IN USER TABLE FROM DATABASE
@@ -172,7 +175,7 @@ def listLands(db: Session = Depends(get_db)):
 
 ### GET USER BY ID
 
-@app.get('/getuser/{id}', status_code=200, response_model=schemas.responseUser, tags=['users'])
+@app.get('/getuser/{id}', status_code=200, response_model=schemas.ShowUser, tags=['users'])
 def showUser(id, response: Response, db: Session = Depends(get_db)):
 
     user = db.query(models.User).filter(models.User.id == id).first() ### QUERY USER BY ID
@@ -265,7 +268,7 @@ def deleteLand(id, db: Session = Depends(get_db)):
 ### UPDATE HOUSE
 
 @app.put('/updateHouse/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
-def updateHouse(id, request: schemas.House, db: Session = Depends(get_db)):
+def updateHouse(id, request: schemas.HouseBase, db: Session = Depends(get_db)):
     
     house = db.query(models.House).filter(models.House.id == id) ### QUERY BI HOUSE ID
     
@@ -295,7 +298,7 @@ def updateHouse(id, request: schemas.House, db: Session = Depends(get_db)):
 ### UPDATE APARTMENT
 
 @app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['apartments'])
-def updateApartment(id, request:schemas.ApartmentRequest, db: Session = Depends(get_db)):
+def updateApartment(id, request:schemas.ApartmentBase, db: Session = Depends(get_db)):
 
     apartment = db.query(models.Apartment).filter(models.Apartment.id == id) ### QUERY BY APARTMENT ID
 
@@ -326,7 +329,7 @@ def updateApartment(id, request:schemas.ApartmentRequest, db: Session = Depends(
 ### UPDATE LAND
 
 @app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['lands'])
-def updateLand(id, request:schemas.LandRequest, db: Session = Depends(get_db)):
+def updateLand(id, request:schemas.LandBase, db: Session = Depends(get_db)):
 
     land = db.query(models.Land).filter(models.Land.id == id) ### QUERY BY LAND ID
 

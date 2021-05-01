@@ -1,6 +1,7 @@
-from sqlalchemy import Integer, String, Float, Boolean
+from sqlalchemy import Integer, String, Float, Boolean, ForeignKey
 from .database import Base
 from sqlalchemy.sql.schema import Column
+from sqlalchemy.orm import relationship
 
 class User(Base):
     __tablename__ = 'Users'
@@ -9,6 +10,10 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
+
+    houses = relationship("House", back_populates="owner")
+    apartments = relationship("Apartment", back_populates="owner")
+    lands = relationship("Land", back_populates="owner")
 
 class House(Base):
     __tablename__ = 'Houses'
@@ -26,6 +31,9 @@ class House(Base):
     area = Column(Float, nullable=False)
     definition = Column(Boolean, nullable=False)
     price = Column(Float, nullable=False)
+    owner_id = Column(Integer, ForeignKey("Users.id"))
+
+    owner = relationship("User", back_populates="houses")
 
 class Apartment(Base):
     __tablename__ = 'Apartments'
@@ -45,6 +53,10 @@ class Apartment(Base):
     garage_spots = Column(Integer)
     sun_position = Column(String)
     price = Column(Float, nullable=False)
+    owner_id = Column(Integer, ForeignKey("Users.id"))
+
+    owner = relationship("User", back_populates="apartments")
+
 
 class Land(Base):
     __tablename__ = 'Lands'
@@ -59,3 +71,6 @@ class Land(Base):
     definition = Column(Boolean, nullable=False)
     area = Column(Float, nullable=False)
     price = Column(Float, nullable=False)
+    owner_id = Column(Integer, ForeignKey("Users.id"))
+
+    owner = relationship("User", back_populates="lands")
