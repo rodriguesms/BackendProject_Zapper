@@ -1,23 +1,23 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
-from .database import engine, SessionLocal, get_db
-from .schemas import ApartmentRequest, responseApartment, HouseRequest, responseHouse, LandRequest, responseLand, userRequest, responseUser
-from .models import House, Apartment, Land, User, Base
+from . import database, schemas, models
 from .hashing import Hash
 from typing import List
 
 app = FastAPI()
 
-Base.metadata.create_all(engine) ### DINAMICALLY UPDATING DATABASE WITH NEW MODELS
+models.Base.metadata.create_all(database.engine) ### DINAMICALLY UPDATING DATABASE WITH NEW MODELS
+
+get_db = database.get_db
 
 ### CREATE USER
 
 @app.post('/user', status_code=status.HTTP_201_CREATED, tags=['users'])
-def createUser(request: userRequest, db: Session = Depends(get_db)):
+def createUser(request: schemas.userRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW USER OBJECT USING USER SCHEMA ON REQUEST
 
-    new_user = User(
+    new_user = models.User(
         name = request.name,
         email = request.email,
         password = Hash.bcrypt(request.password) ### HASHING PASSWORD
@@ -34,11 +34,11 @@ def createUser(request: userRequest, db: Session = Depends(get_db)):
 ### CREATE HOUSE
 
 @app.post('/house', status_code=status.HTTP_201_CREATED, tags=['houses'])
-def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
+def createHouse(request: schemas.House, db: Session = Depends(get_db)):
     
     ### CREATING NEW HOUSE OBJECT USING HOUSE SCHEMA ON REQUEST
 
-    new_house = House(
+    new_house = models.House(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -63,11 +63,11 @@ def createHouse(request: HouseRequest, db: Session = Depends(get_db)):
 ### CREATE APARTMENT
 
 @app.post('/apartment', status_code=status.HTTP_201_CREATED, tags=['apartments'])
-def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
+def createApartment(request: schemas.ApartmentRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW APARTMENT OBJECT USING APARTMENT SCHEMA ON REQUEST
 
-    new_apt = Apartment(
+    new_apt = models.Apartment(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -94,11 +94,11 @@ def createApartment(request: ApartmentRequest, db: Session = Depends(get_db)):
 ### CREATE LAND
 
 @app.post('/land', status_code=status.HTTP_201_CREATED, tags=['lands'])
-def createLand(request: LandRequest, db: Session = Depends(get_db)):
+def createLand(request: schemas.LandRequest, db: Session = Depends(get_db)):
 
     ### CREATING NEW LAND OBJECT USING LAND SCHEMA ON REQUEST
 
-    new_land = Land(
+    new_land = models.Land(
         title = request.title, 
         zip_code = request.zip_code, 
         city = request.city, 
@@ -119,10 +119,10 @@ def createLand(request: LandRequest, db: Session = Depends(get_db)):
 
 ### GET ALL USERS
 
-@app.get('/getuser', response_model=List[responseUser], tags=['users'])
+@app.get('/getuser', response_model=List[schemas.responseUser], tags=['users'])
 def listUsers(db: Session = Depends(get_db)):
     
-    users = db.query(User).all() ### GET ALL USERS IN USER TABLE FROM DATABASE
+    users = db.query(models.User).all() ### GET ALL USERS IN USER TABLE FROM DATABASE
 
     if not users: ### IF THERE IS NO USER REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -133,10 +133,10 @@ def listUsers(db: Session = Depends(get_db)):
 
 ### GET ALL HOUSES
 
-@app.get('/gethouse', response_model=List[responseHouse], tags=['houses'])
+@app.get('/gethouse', response_model=List[schemas.responseHouse], tags=['houses'])
 def listHouses(db: Session = Depends(get_db)):
 
-    houses = db.query(House).all() ### GET ALL HOUSES IN HOUSE TABLE FROM DATABASE
+    houses = db.query(models.House).all() ### GET ALL HOUSES IN HOUSE TABLE FROM DATABASE
 
     if not houses: ### IF THERE IS NO HOUSE REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -146,10 +146,10 @@ def listHouses(db: Session = Depends(get_db)):
 
 ### GET ALL APARTMENTS
 
-@app.get('/getapt', response_model=List[responseApartment], tags=['apartments'])
+@app.get('/getapt', response_model=List[schemas.responseApartment], tags=['apartments'])
 def listApts(db: Session = Depends(get_db)):
 
-    apts = db.query(Apartment).all() ### GET ALL APARTMENTS IN APARTMENT TABLE FROM DATABASE
+    apts = db.query(models.Apartment).all() ### GET ALL APARTMENTS IN APARTMENT TABLE FROM DATABASE
 
     if not apts: ### IF THERE IS NO APARTMENT REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -159,10 +159,10 @@ def listApts(db: Session = Depends(get_db)):
 
 ### GET ALL LANDS
 
-@app.get('/getland', response_model=List[responseLand], tags=['lands'])
+@app.get('/getland', response_model=List[schemas.responseLand], tags=['lands'])
 def listLands(db: Session = Depends(get_db)):
 
-    lands = db.query(Land).all() ### GET ALL LANDS IN LANDS TABLE FROM DATABASE
+    lands = db.query(models.Land).all() ### GET ALL LANDS IN LANDS TABLE FROM DATABASE
 
     if not lands: ### IF THERE IS NO LAND REGISTERED: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -172,10 +172,10 @@ def listLands(db: Session = Depends(get_db)):
 
 ### GET USER BY ID
 
-@app.get('/getuser/{id}', status_code=200, response_model=responseUser, tags=['users'])
+@app.get('/getuser/{id}', status_code=200, response_model=schemas.responseUser, tags=['users'])
 def showUser(id, response: Response, db: Session = Depends(get_db)):
 
-    user = db.query(User).filter(User.id == id).first() ### QUERY USER BY ID
+    user = db.query(models.User).filter(models.User.id == id).first() ### QUERY USER BY ID
 
     if not user: ### IF USER ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -185,10 +185,10 @@ def showUser(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET HOUSE BY ID
 
-@app.get('/gethouse/{id}', status_code=200, response_model=responseHouse, tags=['houses'])
+@app.get('/gethouse/{id}', status_code=200, response_model=schemas.responseHouse, tags=['houses'])
 def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
-    house = db.query(House).filter(House.id == id).first() ### QUERY HOUSE BY ID
+    house = db.query(models.House).filter(models.House.id == id).first() ### QUERY HOUSE BY ID
 
     if not house: ### IF HOUSE ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -198,10 +198,10 @@ def showHouse(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET APARTMENT BY ID
 
-@app.get('/getapt/{id}', status_code=200,response_model=responseApartment, tags=['apartments'])
+@app.get('/getapt/{id}', status_code=200,response_model=schemas.responseApartment, tags=['apartments'])
 def showApt(id, response: Response, db: Session = Depends(get_db)):
 
-    apt = db.query(Apartment).filter(Apartment.id == id).first() ### QUERY APARTMENT BY ID
+    apt = db.query(models.Apartment).filter(models.Apartment.id == id).first() ### QUERY APARTMENT BY ID
 
     if not apt: ### IF APARTMENT ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -211,10 +211,10 @@ def showApt(id, response: Response, db: Session = Depends(get_db)):
 
 ### GET LAND BY ID
 
-@app.get('/getland/{id}', status_code=200, response_model=responseLand, tags=['lands'])
+@app.get('/getland/{id}', status_code=200, response_model=schemas.responseLand, tags=['lands'])
 def showLand(id, response: Response, db: Session = Depends(get_db)):
 
-    land = db.query(Land).filter(Land.id == id).first() ### QUERY LAND BY ID
+    land = db.query(models.Land).filter(models.Land.id == id).first() ### QUERY LAND BY ID
 
     if not land: ### IF LAND ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
@@ -224,31 +224,26 @@ def showLand(id, response: Response, db: Session = Depends(get_db)):
 
 ### DELETE HOUSE
 
-@app.delete('/house/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['houses'])
+@app.delete('/deletehouse/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['houses'])
 def deleteHouse(id, db: Session = Depends(get_db)):
 
-    deletedHouse = db.query(House).filter(House.id == id) ### QUERY HOUSE BY ID
-    
-    if not deletedHouse.first(): ### IF HOUSE ID WAS NOT FOUND: RAISE EXCEPTION
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-        detail=f"House with id {id} was not found")
+    db.query(models.House).filter(models.House.id == id).delete(synchronize_session=False)
+    db.commit()
+    return f"The House with id {id} was deleted"
 
-    delete(synchronize_session=False) ### DELETING HOUSE
-    db.commit() ### COMMIT CHANGES
-    return f'The house with id: {id} was deleted'
 
 ### DELETE APARTMENT
 
 @app.delete('/apartment/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['apartments'])
 def deleteApartment(id, db: Session = Depends(get_db)):
 
-    deletedApartment = db.query(Apartment).filter(Apartment.id == id) ### QUERY APARTMENT BY ID
+    deletedApartment = db.query(models.Apartment).filter(models.Apartment.id == id) ### QUERY APARTMENT BY ID
 
     if not deletedApartment.first(): ### IF APARTMENT ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
         detail=f"Apartment with id {id} was not found")
 
-    apt.delete(synchronize_session=False) ### DELETING APARTMENT
+    deletedApartment.delete(synchronize_session=False) ### DELETING APARTMENT
     db.commit() ### COMMIT CHANGES
     return f'The Apartment with id: {id} was deleted'
 
@@ -257,57 +252,98 @@ def deleteApartment(id, db: Session = Depends(get_db)):
 @app.delete('/land/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['lands'])
 def deleteLand(id, db: Session = Depends(get_db)): 
 
-    deletedLand = db.query(Land).filter(Land.id == id) ### QUERY LAND BY ID
+    deletedLand = db.query(models.Land).filter(models.Land.id == id) ### QUERY LAND BY ID
     
-    if not updatedLand.first(): ### IF LAND ID WAS NOT FOUND: RAISE EXCEPTION
+    if not deletedLand.first(): ### IF LAND ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
         detail=f"Land with id {id} was not found")
 
-    delete(synchronize_session=False) ###DELETING LAND
+    deletedLand.delete(synchronize_session=False) ###DELETING LAND
     db.commit() ### COMMIT CHANGE
     return f'The real estate with id: {id} was deleted'
 
 ### UPDATE HOUSE
 
-@app.put('/house/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
-def updateHouse(id, request:HouseRequest, db: Session = Depends(get_db)):
-
-    updatedHouse = db.query(House).filter(House.id == id) ### QUERY BY HOUSE ID
-
-    if not updatedHouse.first(): ### IF HOUSE ID WAS NOT FOUND: RAISE EXCEPTION
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+@app.put('/updateHouse/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['houses'])
+def updateHouse(id, request: schemas.House, db: Session = Depends(get_db)):
+    
+    house = db.query(models.House).filter(models.House.id == id) ### QUERY BI HOUSE ID
+    
+    if not house.first(): ### IF HOUSE ID WAS NOT FOUND: RAISE EXCEPTION
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
         detail=f"House with id {id} was not found")
 
-    updatedHouse.update(request) ### UPDATING HOUSE
-    db.commit() ### COMMIT CHANGE
-    return f'House with {id} updated'
+    house.update({
+        "title": request.title,
+        "zip_code": request.zip_code,
+        "city": request.city,
+        "neighborhood": request.neighborhood,
+        "street": request.street,
+        "number": request.number,
+        "floor_quant": request.floor_quant,
+        "rooms": request.rooms,
+        "land_area": request.land_area,
+        "area": request.area,
+        "definition": request.definition,
+        "price": request.price
+    })
+
+
+    db.commit()
+    return f"House with id {id} was updated"
 
 ### UPDATE APARTMENT
 
 @app.put('/apartment/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['apartments'])
-def updateApartment(id, request:ApartmentRequest, db: Session = Depends(get_db)):
+def updateApartment(id, request:schemas.ApartmentRequest, db: Session = Depends(get_db)):
 
-    updatedApartment = db.query(Apartment).filter(Apartment.id == id) ### QUERY BY APARTMENT ID
+    apartment = db.query(models.Apartment).filter(models.Apartment.id == id) ### QUERY BY APARTMENT ID
 
-    if not updatedApartment.first(): ### IF APARTMENT ID WAS NOT FOUND: RAISE EXCEPTION
+    if not apartment.first(): ### IF APARTMENT ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
         detail=f"Apartment with id {id} was not found")
 
-    updatedHouse.update(request) ### UPDATING APARTMENT
+    apartment.update({ ### UPDATING APARTMENT
+        "title" : request.title, 
+        "zip_code" : request.zip_code, 
+        "city" : request.city, 
+        "neighborhood" : request.neighborhood, 
+        "street" : request.street, 
+        "number" : request.number, 
+        "definition" : request.definition,
+        "area"  : request.area,
+        "condom_value" : request.condom_value,
+        "rooms" : request.rooms, 
+        "floor" : request.floor,
+        "garage_spots" : request.garage_spots,
+        "sun_position" : request.sun_position,
+        "price" : request.price
+    }) 
+
     db.commit() ### COMMIT CHANGE
-    return f'Apartment with {id} updated'
+    return f'Apartment with id {id} updated'
 
 ### UPDATE LAND
 
 @app.put('/land/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['lands'])
-def updateLand(id, request:LandRequest, db: Session = Depends(get_db)):
+def updateLand(id, request:schemas.LandRequest, db: Session = Depends(get_db)):
 
-    updatedLand = db.query(Land).filter(Land.id == id) ### QUERY BY LAND ID
+    land = db.query(models.Land).filter(models.Land.id == id) ### QUERY BY LAND ID
 
-    if not updatedLand.first(): ### IF LAND ID WAS NOT FOUND: RAISE EXCEPTION
+    if not land.first(): ### IF LAND ID WAS NOT FOUND: RAISE EXCEPTION
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
         detail=f"Land with id {id} was not found")
 
-    updatedLand.update(request) ### UPDATING LAND
+    land.update({
+        "title" : request.title, 
+        "zip_code" : request.zip_code, 
+        "city" : request.city, 
+        "neighborhood" : request.neighborhood, 
+        "street" : request.street, 
+        "number" : request.number, 
+        "definition" : request.definition,
+        "area"  : request.area,
+        "price" : request.price
+    }) ### UPDATING LAND
     db.commit() ### COMMIT CHANGE
-    return f'Land with {id} updated'
+    return f'Land with id {id} updated'

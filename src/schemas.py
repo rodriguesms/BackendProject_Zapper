@@ -12,7 +12,7 @@ class responseUser(BaseModel):
     class Config():
         orm_mode = True
 
-class HouseRequest(BaseModel):
+class House(BaseModel):
     title: str
     zip_code: str
     city: str
