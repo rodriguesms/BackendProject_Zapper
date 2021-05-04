@@ -4,3 +4,4 @@ sqlalchemy
 alembic
 psycopg2-binary
 passlib[bcrypt]
+python-jose[cryptography]

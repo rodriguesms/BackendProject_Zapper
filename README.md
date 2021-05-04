@@ -23,6 +23,7 @@ This backend application was inspired by original Zapper, and represents not onl
 * [Psycopg2](##Psycopg2)
 * [Alembic](##Alembic)
 * [Passlib](##Passlib)
+* [Python-Jose](##Python-Jose)
 
 #### Database:
 
@@ -113,3 +114,8 @@ _Source²_: https://pypi.org/project/alembic/
 Passlib is a password hashing library for Python 2 & 3, which provides cross-platform implementations of over 30 password hashing algorithms, as well as a framework for managing existing password hashes. It’s designed to be useful for a wide range of tasks, from verifying a hash found in /etc/shadow, to providing full-strength password hashing for multi-user application.
 
 _Source_: https://passlib.readthedocs.io/
+
+## Python-Jose
+
+The JavaScript Object Signing and Encryption (JOSE) technologies - JSON Web Signature (JWS), JSON Web Encryption (JWE), JSON Web Key (JWK), and JSON Web Algorithms (JWA) - collectively can be used to encrypt and/or sign content using a variety of algorithms. While the full set of permutations is extremely large, and might be daunting to some, it is expected that most applications will only use a small set of algorithms to meet their needs.
+
