@@ -7,8 +7,8 @@ _The following framework descriptions were collected from the framework's own pe
 
 ## Introduction
 
-Originally, Zapper project was conceived using C/C++ in my Computer Enginnering graduation, for a programming course. 
-The first project was developed using text files as an improvised database, and was able to register houses, apartments and lands for sale or rent. The user was be able to consult any registered property, filtering results by property type, price, or even the address.
+At the beginning, Zapper project was conceived using C/C++ in my Computer Enginnering graduation, for a programming course. 
+The first project was developed using text files as an improvised local database, and was able to register houses, apartments and lands for sale or rent. The user was be able to consult any registered property, filtering results by property type, price, or even the address.
 This backend application was inspired by original Zapper, and represents not only a Zapper project update, but an update to myself as a developer.
 
 #### Main programming language:
